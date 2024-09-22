@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ExampleApiClient, :vcr do
+describe ExampleApiClient, vcr: {} do
   describe "#list_todos" do
     it "responds with 200 status" do
       response = described_class.new.list_todos()

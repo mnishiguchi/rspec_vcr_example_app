@@ -13,16 +13,18 @@ end
 
 RSpec.configure do |config|
   config.around(:each, :vcr) do |example|
-    cassette_path_segments = example.metadata[:file_path].split(File::SEPARATOR)
-    cassette_path_segments[-1].sub!('.rb', '')
-    cassette_path_segments = cassette_path_segments.drop(cassette_path_segments.index('spec').next)
+    cassette_path_segments = example.metadata[:file_path].sub(%r{.*/spec/}, '').sub('.rb', '').split(File::SEPARATOR)
     cassette_path = File.join(cassette_path_segments)
 
-    options = example.metadata.slice(:record, :match_requests_on)
-    options[:record] = :new_episodes if ENV['VCR_RECORD'] || options[:record] == true
-
-    VCR.use_cassette(cassette_path, options) do
-      example.call
+    case example.metadata
+    in vcr: true
+      vcr_overrides = {}
+    in vcr: {**vcr_overrides}
+      vcr_overrides[:record] = :new_episodes if vcr_overrides[:record] == true
     end
+
+    vcr_overrides[:record] = :new_episodes if ENV['VCR_RECORD']
+
+    VCR.use_cassette(cassette_path, vcr_overrides) { example.call }
   end
 end
