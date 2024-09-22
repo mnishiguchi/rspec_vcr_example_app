@@ -24,6 +24,7 @@ require 'rspec/rails'
 # require only the support files necessary.
 #
 # Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
+require Rails.root.join('spec/support/vcr.rb')
 require Rails.root.join('spec/support/webmock.rb')
 
 # Checks for pending migrations and applies them before tests are run.
