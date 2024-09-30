@@ -65,5 +65,5 @@ group :test do
   gem "vcr", "~> 6.3"
 
   # See https://github.com/bblimke/webmock
-  gem "webmock", "~> 3.23"
+  gem "webmock", "~> 3.24"
 end
